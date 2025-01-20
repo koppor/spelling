@@ -274,7 +274,10 @@ local function parse_default_bad_and_good()
   f = io.open(fname, 'r')
   if f then
      f:close()
+     M.has_bad = true
      parse_bad_plain_list_file(fname)
+  else
+    M.has_bad = false
   end
   -- Try to read good spellings from plain list file
   -- '<jobname>.spell.good'.

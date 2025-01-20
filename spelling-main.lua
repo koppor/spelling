@@ -199,20 +199,78 @@ local function __init()
   -- * bad and good string loading
   -- * match rule handling
   stage[1] = require 'spelling-stage-1'
-  -- * node list tagging
-  -- * spell-checking
-  -- * bad string highlighting
-  stage[2] = require 'spelling-stage-2'
-  -- * text storage
-  stage[3] = require 'spelling-stage-3'
-  -- * text output
-  stage[4] = require 'spelling-stage-4'
+
+  -- Read bad and good spellings from default sources.
+  stage[1].parse_default_bad_and_good()
+
+  if not stage[1].has_bad then
+    texio.write_nl('package spelling: Info! No .spell.bad file found, skipping highighting.')
+
+    -- noop functions for spelling.sty
+
+    PKG_spelling.cb_AtBeginShipout = function()
+    end
+
+    stage[1] = {
+      parse_default_bad_and_good = function()
+      end,
+      parse_bad_plain_list_file = function()
+      end,
+      parse_good_plain_list_file = function()
+      end,
+      parse_XML_LanguageTool_file = function()
+      end,
+      read_match_rules = function()
+      end
+    }
+
+    stage[2] = {
+      enable_word_highlighting = function()
+      end,
+      disable_word_highlighting = function()
+      end,
+      set_highlight_color = function()
+      end,
+      enable_text_tagging = function()
+      end,
+      disable_text_tagging = function()
+      end,
+      set_mapping = function()
+      end,
+      clear_all_mappings = function()
+      end
+    }
+
+    stage[3] = {
+      set_table_paragraphs = function()
+      end
+    }
+
+    stage[4] = {
+      enable_text_output = function()
+      end,
+      disable_text_output = function()
+      end,
+      set_output_file_name = function()
+      end
+    }
+  else
+    -- * node list tagging
+    -- * spell-checking
+    -- * bad string highlighting
+    stage[2] = require 'spelling-stage-2'
+    -- * text storage
+    stage[3] = require 'spelling-stage-3'
+    -- Enable text storage.
+    stage[3].enable_text_storage()
+    -- * text output
+    stage[4] = require 'spelling-stage-4'
+  end
+
   -- Remove global reference to package ressources.
   PKG_spelling.res = nil
   -- Provide global access to module references.
   PKG_spelling.stage = stage
-  -- Enable text storage.
-  stage[3].enable_text_storage()
 end
 
 
