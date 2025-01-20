@@ -493,18 +493,9 @@ local function __vlist_post_recurse()
   end
 end
 
-
---- Find paragraphs and strings.
--- While scanning a node list, this call-back function finds nodes
--- representing the start of a paragraph (local_par whatsit nodes) and
--- strings (chains of nodes of type glyph, kern, disc).
---
--- @param head  Head node of current branch.
--- @param n  The current node.
-local function __visit_node(head, n)
-  local nid = n.id
-  -- Test for word string component node.
-  if nid == GLYPH then
+--- Glyph handling
+-- Adds the given glyph to the current word
+local function handle_glyph(head, n)
     -- Save first node belonging to current word and its head for later
     -- reference.
     if not __curr_word_start then
@@ -521,8 +512,33 @@ local function __visit_node(head, n)
     end
     -- Append character to current word string.
     tabinsert(__curr_word, __codepoint_map[n.char])
-  -- Test for other word string component nodes.
-  elseif (nid == DISC) or (nid == KERN) then
+end
+
+--- Find paragraphs and strings.
+-- While scanning a node list, this call-back function finds nodes
+-- representing the start of a paragraph (local_par whatsit nodes) and
+-- strings (chains of nodes of type glyph, kern, disc).
+--
+-- @param head  Head node of current branch.
+-- @param n  The current node.
+local function __visit_node(head, n)
+  local nid = n.id
+  -- Test for word string component node.
+  if nid == GLYPH then
+    handle_glyph(head, n)
+  -- Test for discretionary node
+  elseif (nid == DISC) then
+    if n.pre ~= nil then
+      if (n.pre.char ~= 45) then
+        -- all glyphs besides "-" need to be added
+        handle_glyph(head, n.pre)
+      end
+    end
+    if n.post ~= nil then
+      handle_glyph(head, n.post)
+    end
+  -- Test for kerning info
+  elseif (nid == KERN) then
     -- We're still within the current word string.  Do nothing.
   -- Test for paragraph start.
   elseif (nid == WHATSIT) and (n.subtype == LOCAL_PAR) then
