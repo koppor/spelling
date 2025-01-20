@@ -529,12 +529,12 @@ local function __visit_node(head, n)
   -- Test for discretionary node
   elseif (nid == DISC) then
     if n.pre ~= nil then
-      if (n.pre.char ~= 45) then
+      if n.pre.char ~= 45 and n.pre.char ~= nil then
         -- all glyphs besides "-" need to be added
         handle_glyph(head, n.pre)
       end
     end
-    if n.post ~= nil then
+    if n.post ~= nil and n.post.char ~= nil then
       handle_glyph(head, n.post)
     end
   -- Test for kerning info
