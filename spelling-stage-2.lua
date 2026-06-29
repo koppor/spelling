@@ -46,6 +46,7 @@ local tabremove = table.remove
 local node_new = node.new
 local node_insert_after = node.insert_after
 local node_insert_before = node.insert_before
+local node_traverse = node.traverse
 
 local recurse_node_list = recurse.recurse_node_list
 
@@ -528,14 +529,13 @@ local function __visit_node(head, n)
     handle_glyph(head, n)
   -- Test for discretionary node
   elseif (nid == DISC) then
-    if n.pre ~= nil then
-      if n.pre.char ~= 45 and n.pre.char ~= nil then
-        -- all glyphs besides "-" need to be added
-        handle_glyph(head, n.pre)
+    -- The replace list holds the glyphs as they appear when the
+    -- discretionary is not broken, i.e. the actual word content.  No
+    -- need to combine the pre- and post-break lists.
+    for r in node_traverse(n.replace) do
+      if r.id == GLYPH then
+        handle_glyph(head, r)
       end
-    end
-    if n.post ~= nil and n.post.char ~= nil then
-      handle_glyph(head, n.post)
     end
   -- Test for kerning info
   elseif (nid == KERN) then
