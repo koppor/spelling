@@ -1,10 +1,8 @@
-This material is subject to the LaTeX Project Public License. See
-<http://www.latex-project.org/lppl/> for the details of that license.
+# `spelling`
 
+## Package information
 
-
-### Package information
-
+```yaml
 Package name: spelling  
 Summary description: support for spell-checking of LuaTeX documents  
 Version: v0.41  
@@ -12,10 +10,9 @@ Date: 2013-05-25
 License: [LPPL v1.3c](http://www.latex-project.org/lppl/lppl-1-3c.html)  
 Maintenance status: maintained  
 Current maintainer: Stephan Hennig, <sh2d@arcor.de>  
+```
 
-
-
-### Description
+## Description
 
 This package supports spell-checking of TeX documents compiled with the
 LuaTeX engine.  It can give visual feedback in PDF output similar to
@@ -24,9 +21,7 @@ spell-checker application that can check a plain text file and output a
 list of bad spellings.  The package should work with most
 spell-checkers, even dumb, TeX-unaware ones.
 
-
-
-### Development
+## Development
 
 The development repository is currently hosted at
 [GitHub](https://github.com/sh2d/spelling/).  Code documentation is in
@@ -39,16 +34,13 @@ Bugs and a wish list can be found in the
 [issue tracker](https://github.com/sh2d/spelling/issues/).  Patches
 welcome!
 
-
 _Happy TeXing!_
 
-
-
-### File list
+## File list
 
     CHANGES
     LICENSE
-    README
+    README.md
     spelling.sty
     spelling-doc.bad
     spelling-doc.tex
@@ -60,7 +52,10 @@ _Happy TeXing!_
     spelling-stage-3.lua
     spelling-stage-4.lua
 
+## License
 
+This material is subject to the LaTeX Project Public License. See
+<http://www.latex-project.org/lppl/> for the details of that license.
 
 <!--
 %%% Local Variables: 
